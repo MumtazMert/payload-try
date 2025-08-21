@@ -18,6 +18,11 @@ const nextConfig = {
           protocol: url.protocol.replace(':', ''),
         }
       }),
+      // Add Vercel Blob domain for image uploads
+      {
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+      },
     ],
   },
   webpack: (webpackConfig) => {
