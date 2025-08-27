@@ -1,20 +1,8 @@
-import React, { Fragment } from 'react'
-
-import { CallToActionBlock } from '@/blocks/CallToAction/Component'
-import { ContentBlock } from '@/blocks/Content/Component'
-import { FormBlock } from '@/blocks/Form/Component'
-import { MediaBlock } from '@/blocks/MediaBlock/Component'
-
-const blockComponents = {
-  content: ContentBlock,
-  cta: CallToActionBlock,
-  formBlock: FormBlock,
-  mediaBlock: MediaBlock,
-}
+import React from 'react'
 
 export const RenderBlocks: React.FC<{
   blocks: {
-    blockType?: 'content' | 'cta' | 'formBlock' | 'mediaBlock'
+    blockType?: string
     [key: string]: any
   }[]
 }> = (props) => {
@@ -24,25 +12,17 @@ export const RenderBlocks: React.FC<{
 
   if (hasBlocks) {
     return (
-      <Fragment>
+      <>
         {blocks.map((block, index) => {
-          const { blockType } = block
-
-          if (blockType && blockType in blockComponents) {
-            const Block = blockComponents[blockType]
-
-            if (Block) {
-              return (
-                <div className="my-16" key={index}>
-                  {/* @ts-expect-error there may be some mismatch between the expected types here */}
-                  <Block {...block} disableInnerContainer />
-                </div>
-              )
-            }
-          }
-          return null
+          // Note: Blocks are now handled directly in RichText component
+          // This component is kept for backward compatibility but currently unused
+          return (
+            <div className="my-16" key={index}>
+              <pre>Block type: {block.blockType}</pre>
+            </div>
+          )
         })}
-      </Fragment>
+      </>
     )
   }
 
