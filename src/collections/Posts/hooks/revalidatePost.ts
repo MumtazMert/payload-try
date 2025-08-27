@@ -17,6 +17,11 @@ export const revalidatePost: CollectionAfterChangeHook<Post> = ({
 
       revalidatePath(path)
       revalidateTag('posts-sitemap')
+
+      // Revalidate homepage and posts page when a post is published
+      payload.logger.info(`Revalidating homepage and posts page`)
+      revalidatePath('/')
+      revalidatePath('/posts')
     }
 
     // If the post was previously published, we need to revalidate the old path
@@ -27,6 +32,11 @@ export const revalidatePost: CollectionAfterChangeHook<Post> = ({
 
       revalidatePath(oldPath)
       revalidateTag('posts-sitemap')
+
+      // Revalidate homepage and posts page when a post is unpublished
+      payload.logger.info(`Revalidating homepage and posts page`)
+      revalidatePath('/')
+      revalidatePath('/posts')
     }
   }
   return doc
@@ -38,6 +48,10 @@ export const revalidateDelete: CollectionAfterDeleteHook<Post> = ({ doc, req: { 
 
     revalidatePath(path)
     revalidateTag('posts-sitemap')
+
+    // Revalidate homepage and posts page when a post is deleted
+    revalidatePath('/')
+    revalidatePath('/posts')
   }
 
   return doc
