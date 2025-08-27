@@ -4,9 +4,13 @@ import { cn } from '@/utilities/ui'
 import React from 'react'
 import RichText from '@/components/RichText'
 
-import type { MediaBlock as MediaBlockProps } from '@/payload-types'
-
 import { Media } from '../../components/Media'
+
+type MediaBlockProps = {
+  media?: any
+  caption?: any
+  alignment?: 'left' | 'center' | 'right'
+}
 
 type Props = MediaBlockProps & {
   breakout?: boolean

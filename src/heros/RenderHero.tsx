@@ -1,7 +1,5 @@
 import React from 'react'
 
-import type { Page } from '@/payload-types'
-
 import { HighImpactHero } from '@/heros/HighImpact'
 import { LowImpactHero } from '@/heros/LowImpact'
 import { MediumImpactHero } from '@/heros/MediumImpact'
@@ -12,7 +10,12 @@ const heroes = {
   mediumImpact: MediumImpactHero,
 }
 
-export const RenderHero: React.FC<Page['hero']> = (props) => {
+type HeroProps = {
+  type?: 'highImpact' | 'lowImpact' | 'mediumImpact' | 'none'
+  [key: string]: any
+}
+
+export const RenderHero: React.FC<HeroProps> = (props) => {
   const { type } = props || {}
 
   if (!type || type === 'none') return null
@@ -21,5 +24,6 @@ export const RenderHero: React.FC<Page['hero']> = (props) => {
 
   if (!HeroToRender) return null
 
-  return <HeroToRender {...props} />
+  const HeroComponent = HeroToRender as React.ComponentType<any>
+  return <HeroComponent {...props} disableInnerContainer />
 }
