@@ -5,9 +5,11 @@ import { image2 } from './image-2'
 import { post1 } from './post-1'
 import { post2 } from './post-2'
 import { post3 } from './post-3'
+import { seedContactUs } from './contact-us'
+import { seedHeaderNav } from './header-nav'
 
-const collections: CollectionSlug[] = ['media', 'posts']
-const globals: GlobalSlug[] = []
+const collections: CollectionSlug[] = ['media', 'posts', 'contact-us']
+const globals: GlobalSlug[] = ['header', 'footer']
 
 // Next.js revalidation errors are normal when seeding the database without a server running
 // i.e. running `yarn seed` locally instead of using the admin UI within an active app
@@ -30,8 +32,8 @@ export const seed = async ({
 
   // clear the database
   await Promise.all(
-    globals.map((global) =>
-      payload.updateGlobal({
+    globals.map(async (global) => {
+      return payload.updateGlobal({
         slug: global,
         data: {
           navItems: [],
@@ -40,8 +42,8 @@ export const seed = async ({
         context: {
           disableRevalidate: true,
         },
-      }),
-    ),
+      })
+    }),
   )
 
   await Promise.all(
@@ -171,7 +173,40 @@ export const seed = async ({
   // ])
 
   payload.logger.info(`— Seeding globals...`)
-  // Globals seeding skipped - header and footer globals removed from configuration
+
+  // Seed Header navigation
+  await seedHeaderNav(payload)
+
+  // Seed Footer global with navigation
+  await payload.updateGlobal({
+    slug: 'footer',
+    data: {
+      navItems: [
+        {
+          link: {
+            type: 'custom',
+            url: '/posts',
+            label: 'Posts',
+            newTab: false,
+          },
+        },
+        {
+          link: {
+            type: 'custom',
+            url: '/contact-us',
+            label: 'Contact Us',
+            newTab: false,
+          },
+        },
+      ],
+    },
+    context: {
+      disableRevalidate: true,
+    },
+  })
+
+  // Seed Contact Us global
+  await seedContactUs(payload)
 
   payload.logger.info('Seeded database successfully!')
 }
